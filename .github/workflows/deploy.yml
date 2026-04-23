@@ -1,36 +1,32 @@
-Name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
-On:
-  Push:
-    Branches: [“main”]
+on:
+  push:
+    branches: ["main"]
 
-Permissions:
-  Contents: read
-  Pages: write
-  Id-token: write
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-Jobs:
-  Build:
-    Runs-on: ubuntu-latest
-    Steps:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        With:
-          Node-version: 20
--	Run: |
-          Mkdir -p dist
-          Cp index.html dist/
--	Uses: actions/upload-pages-artifact@v3
-        With:
-          Path: ‘./dist’
+      - run: |
+          mkdir -p dist
+          cp index.html dist/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
 
-  Deploy:
-    Needs: build
-    Runs-on: ubuntu-latest
-    Environment:
-      Name: github-pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
--	Id: deployment
-        Uses: actions/deploy-pages@v4
-
+      - id: deployment
+        uses: actions/deploy-pages@v4
