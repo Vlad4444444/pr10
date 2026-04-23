@@ -2,7 +2,7 @@ Name: Deploy to GitHub Pages
 
 On:
   Push:
-    [span_5](start_span)branches: [“main”] # Запуск при пуше в main[span_5](end_span)
+    Branches: [“main”]
 
 Permissions:
   Contents: read
@@ -13,15 +13,16 @@ Jobs:
   Build:
     Runs-on: ubuntu-latest
     Steps:
-      - [span_6](start_span)uses: actions/checkout@v4 # Берем код[span_6](end_span)
-      - [span_7](start_span)uses: actions/setup-node@v4 # Ставим Node.js[span_7](end_span)
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         With:
           Node-version: 20
-      - [span_8](start_span)run: npm install # Ставим зависимости[span_8](end_span)
-      - [span_9](start_span)run: npm run build # Собираем проект[span_9](end_span)
-      - uses: actions/upload-pages-artifact@v3
+-	Run: |
+          Mkdir -p dist
+          Cp index.html dist/
+-	Uses: actions/upload-pages-artifact@v3
         With:
-          [span_10](start_span)path: ‘./dist’ # Папка, которую деплоим[span_10](end_span)
+          Path: ‘./dist’
 
   Deploy:
     Needs: build
@@ -31,6 +32,5 @@ Jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
 -	Id: deployment
-        [span_11](start_span)uses: actions/deploy-pages@v4 # Сам деплой[span_11](end_span)
-
+        Uses: actions/deploy-pages@v4
 
